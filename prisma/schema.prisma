@@ -16,6 +16,7 @@ datasource db {
 model User {
   id     String  @id @default(uuid())
   email  String  @unique
+  boards Board[]
 
   Password Password?
 }
@@ -27,3 +28,48 @@ model Password {
   User   User @relation(fields: [userId], references: [id])
   userId String  @unique
 }
+
+model Board {
+  id        Int      @id @default(autoincrement())
+  name      String
+  color     String   @default("#e0e0e0")
+  createdAt DateTime @default(now())
+  columns   Column[]
+  Task      Task[]
+  User   User  @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Column {
+  id      String @id @default(uuid())
+  name    String
+  order   Float  @default(0)
+  tasks   Task[]
+  Board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId Int
+}
+
+model Task {
+  id      String  @id @default(uuid())
+  title   String
+  content String?
+  priority Int @default(0)
+  subTasks SubTask[]
+  order Float
+
+  Column   Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  columnId String
+
+  Board   Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId Int
+}
+
+model SubTask {
+  id      String  @id @default(uuid())
+  title   String
+  content String?
+
+  Task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+}
+

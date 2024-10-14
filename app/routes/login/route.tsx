@@ -1,5 +1,6 @@
 import { ActionFunction, redirect } from "@remix-run/node";
 import { loginUser } from "./queries";
+import { setAuthFromLogin } from "~/auth/auth";
 
 export let action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
@@ -7,9 +8,9 @@ export let action: ActionFunction = async ({ request }) => {
     const password = formData.get("password");
 
     try {
-        await loginUser(String(email), String(password));
-        redirect("/");
-
+        let userId = await loginUser(String(email), String(password));
+        let response = redirect("/home");
+        return setAuthFromLogin(response, String(userId))
     } catch (error) {
         return { error: "Error al crear el usuario." };
     }
