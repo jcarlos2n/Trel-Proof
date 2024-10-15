@@ -32,7 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="h-full w-full flex flex-col">
         <Header/>
         {children}
         <ScrollRestoration />
