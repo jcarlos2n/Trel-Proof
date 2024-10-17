@@ -2,7 +2,7 @@ import { prisma } from "~/db/prisma";
 
 export async function deleteBoard(boardId: number, ownerId: string) {
   return prisma.board.delete({
-    where: { id: boardId, ownerId },
+    where: { id: boardId, ownerId: ownerId },
   });
 }
 

@@ -28,41 +28,41 @@ export async function updateBoardName(
   });
 }
 
-export function upsertItem(
-    id: string | null,
-    boardId: number,
-    columnId: string,
-    order: number,
-    title: string,
-    priority: number,
-    content: string | null,
-    ownerId: string,
-  ) {
-    return prisma.task.upsert({
-      where: {
-        id: id || undefined,
-        Board: {
-          ownerId,
-        },
+export function createOrUpdateTask(
+  id: string | null,
+  boardId: number,
+  columnId: string,
+  order: number,
+  title: string,
+  priority: number,
+  content: string | null,
+  ownerId: string,
+) {
+  return prisma.task.upsert({
+    where: {
+      id: id || undefined,
+      Board: {
+        ownerId,
       },
-      create: {
-        boardId,
-        columnId,
-        order,
-        title,
-        priority,
-        content
-      },
-      update: {
-        boardId,
-        columnId,
-        order,
-        title,
-        priority,
-        content
-      },
-    });
-  }
+    },
+    create: {
+      boardId,
+      columnId,
+      order,
+      title,
+      priority,
+      content
+    },
+    update: {
+      boardId,
+      columnId,
+      order,
+      title,
+      priority,
+      content
+    },
+  });
+}
 
 export async function updateColumnName(
   id: string,
@@ -78,15 +78,13 @@ export async function updateColumnName(
 export async function createColumn(
   boardId: number,
   name: string,
-  id: string,
   ownerId: string,
 ) {
   let columnCount = await prisma.column.count({
     where: { boardId, Board: { ownerId } },
   });
-  return prisma.column.create({
+  return await prisma.column.create({
     data: {
-      id,
       boardId,
       name,
       order: columnCount + 1,
