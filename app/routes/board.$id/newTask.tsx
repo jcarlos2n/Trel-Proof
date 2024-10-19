@@ -2,12 +2,14 @@ import { Form, useSubmit } from "@remix-run/react";
 import { useRef } from "react";
 import { CancelIcon, SaveIcon } from "~/components/icons";
 
-export function NewCard({
+export function NewTask({
+    boardId,
     columnId,
     nextOrder,
     onComplete,
     onAddCard,
 }: {
+    boardId: number,
     columnId: string;
     nextOrder: number;
     onComplete: () => void;
@@ -48,11 +50,16 @@ export function NewCard({
                 }
             }}
         >
-            <input type="hidden" name="intent" value="upsertTask" />
+            <input type="hidden" name="intent" value="createTask" />
             <input
                 type="hidden"
                 name="columnId"
                 value={columnId}
+            />
+            <input
+                type="hidden"
+                name="boardId"
+                value={boardId}
             />
             <input
                 type="hidden"

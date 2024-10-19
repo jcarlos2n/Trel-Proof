@@ -2,7 +2,8 @@ import { useSubmit } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { AddIcon, CancelIcon, SaveIcon } from "~/components/icons";
-import { NewCard } from "./newCard";
+import { NewTask } from "./newTask";
+import { Task } from "./task";
 
 interface Task {
   id: string;
@@ -14,13 +15,13 @@ interface Task {
 }
 
 interface Props {
-  key: number;
+  boardId: number;
   name: string;
   columnId: string;
   tasks: Task[];
 }
 
-export function Column({ key, name, columnId, tasks }: Props) {
+export function Column({ boardId, name, columnId, tasks }: Props) {
   let submit = useSubmit();
   let [acceptDrop, setAcceptDrop] = useState(false);
   let [columnName, setColumnName] = useState(name);
@@ -65,7 +66,7 @@ export function Column({ key, name, columnId, tasks }: Props) {
           throw new Error("Missing transfer.title");
         }
 
-        let mutation = {
+        let update = {
           order: 1,
           columnId: columnId,
           id: transfer.id,
@@ -73,7 +74,7 @@ export function Column({ key, name, columnId, tasks }: Props) {
         };
 
         submit(
-          { ...mutation, intent: "moveTask" },
+          { ...update, intent: "moveTask" },
           {
             method: "post",
             navigate: false,
@@ -135,9 +136,29 @@ export function Column({ key, name, columnId, tasks }: Props) {
         <input type="hidden" name="columnId" value={columnId} />
       </div>
 
-    
+      <ul ref={listRef} className="flex-grow overflow-auto min-h-[2px]">
+        {tasks && tasks.length > 0
+          ? tasks
+            .sort((a, b) => a.order - b.order)
+            .map((task, index, tasks) => (
+              <Task
+                key={task.id}
+                title={task.title}
+                content={task.content}
+                id={task.id}
+                order={task.order}
+                columnId={columnId}
+                previousOrder={tasks[index - 1] ? tasks[index - 1].order : 0}
+                nextOrder={
+                  tasks[index + 1] ? tasks[index + 1].order : task.order + 1
+                }
+              />
+            ))
+          : null}
+      </ul>
       {edit ? (
-        <NewCard
+        <NewTask
+          boardId={boardId}
           columnId={columnId}
           nextOrder={(!tasks || tasks.length === 0) ? 1 : tasks[tasks.length - 1].order + 1}
           onAddCard={() => scrollList()}

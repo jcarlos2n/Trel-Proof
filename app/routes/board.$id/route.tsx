@@ -78,10 +78,9 @@ export default function Board() {
             <h1>{board.name}</h1>
             <div className="flex flex-grow min-h-0 h-full items-start gap-4 px-8 pb-4">
                 {board.columns.map((column: any) => {
-                    console.log("REF:", column.tasks)
                     return (
                         <Column
-                            key={board.id}
+                            boardId={board.id}
                             name={column.name}
                             columnId={column.id}
                             tasks={column.tasks}
