@@ -64,16 +64,17 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
         if (!transfer.title) {
           throw new Error("Missing transfer.title");
         }
-
+  
         let update = {
           order: 1,
           columnId: columnId,
+          boardId: boardId,
           id: transfer.id,
           title: transfer.title,
         };
 
         submit(
-          { ...update, intent: "moveTask" },
+          { ...update, intent: "createTask" },
           {
             method: "post",
             navigate: false,
