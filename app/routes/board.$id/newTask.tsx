@@ -9,13 +9,15 @@ export function NewTask({
     onComplete,
     onAddCard,
 }: {
-    boardId: number,
+    boardId: number;
     columnId: string;
     nextOrder: number;
     onComplete: () => void;
     onAddCard: () => void;
 }) {
-    let textAreaRef = useRef<HTMLTextAreaElement>(null);
+    let titleRef = useRef<HTMLInputElement>(null);
+    let contentRef = useRef<HTMLInputElement>(null);
+    let priorityRef = useRef<HTMLInputElement>(null);
     let buttonRef = useRef<HTMLButtonElement>(null);
     let submit = useSubmit();
 
@@ -36,13 +38,12 @@ export function NewTask({
                     navigate: false,
                     unstable_flushSync: true,
                 });
+                if (titleRef.current) titleRef.current.value = "";
+                if (contentRef.current) contentRef.current.value = "";
+                if (priorityRef.current) priorityRef.current.value = "0";
 
-                if (textAreaRef.current) {
-                    textAreaRef.current.value = "";
-                } else {
-                    console.error("Expected text area ref but it was null or undefined.");
-                }
                 onAddCard();
+                onComplete();
             }}
             onBlur={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -51,53 +52,46 @@ export function NewTask({
             }}
         >
             <input type="hidden" name="intent" value="createTask" />
-            <input
-                type="hidden"
-                name="columnId"
-                value={columnId}
-            />
-            <input
-                type="hidden"
-                name="boardId"
-                value={boardId}
-            />
-            <input
-                type="hidden"
-                name="order"
-                value={nextOrder}
-            />
+            <input type="hidden" name="columnId" value={columnId} />
+            <input type="hidden" name="boardId" value={boardId} />
+            <input type="hidden" name="order" value={nextOrder} />
 
-            <textarea
+            <label className="text-black">Titulo</label>
+            <input
                 autoFocus
                 required
-                ref={textAreaRef}
+                ref={titleRef}
                 name="title"
                 placeholder="Enter a title for this card"
                 className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14"
-                onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                        event.preventDefault();
-
-                        if (!buttonRef.current) {
-                            console.error("Expected button ref but it was null or undefined.");
-                            return;
-                        }
-                        buttonRef.current.click();
-                    }
-                    if (event.key === "Escape") {
-                        onComplete();
-                    }
-                }}
-                onChange={(event) => {
-                    let el = event.currentTarget;
-                    el.style.height = el.scrollHeight + "px";
-                }}
             />
+
+            <label className="text-black">Descripción</label>
+            <input
+                required
+                ref={contentRef}
+                name="content"
+                placeholder="Enter a description for this card"
+                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14"
+            />
+
+            <label className="text-black">Prioridad</label>
+            <input
+                type="number"
+                required
+                ref={priorityRef}
+                name="priority"
+                placeholder="Enter a priority for this card"
+                defaultValue={0}
+                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 placeholder:text-sm placeholder:text-slate-500"
+                step="1"
+            />
+
             <div className="flex justify-between">
                 <button ref={buttonRef}>
                     <SaveIcon />
                 </button>
-                <button onClick={onComplete}>
+                <button type="button" onClick={onComplete}>
                     <CancelIcon />
                 </button>
             </div>

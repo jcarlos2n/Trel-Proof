@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { requireAuthCookie } from "~/auth/auth";
 import { badRequest, notFound } from "~/http/bad-request";
-import { createColumn, createOrUpdateTask, getBoardData, updateColumnName } from "./queries";
+import { createColumn, createOrUpdateTask, deleteTask, getBoardData, updateColumnName } from "./queries";
 import { useLoaderData } from "@remix-run/react";
 import { NewColumn } from "./newColumn";
 import { useRef } from "react";
@@ -15,10 +15,10 @@ export async function action({ request }: ActionFunctionArgs) {
     let columnId = String(formData.get("columnId"));
     let columnName = String(formData.get("name"));
     let taskId = String(formData.get("taskId"));
-    let orderTask = Number(formData.get("orderTask"));
-    let titleTask = String(formData.get("priority"));
+    let orderTask = Number(formData.get("order"));
+    let titleTask = String(formData.get("title"));
     let priority = Number(formData.get('priority'));
-    let contentTask = String(formData.get("contentTask"));
+    let contentTask = String(formData.get("content"));
 
     switch (intent) {
     
@@ -38,6 +38,12 @@ export async function action({ request }: ActionFunctionArgs) {
         case "createTask": {
             if (!columnId || !boardId) throw badRequest("Missing boardId or columnId");
             await createOrUpdateTask(taskId,boardId,columnId,orderTask,titleTask,priority,contentTask,userId);
+            return { ok: true };
+        }
+
+        case "deleteTask": {
+            if (!taskId || !userId) throw badRequest("Missing taskId or userId");
+            await deleteTask(taskId, userId);
             return { ok: true };
         }
 

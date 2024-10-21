@@ -35,7 +35,6 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
       console.error("listRef is not set");
     }
   }
-
   return (
     <div
       className={
@@ -142,7 +141,6 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
             .sort((a, b) => a.order - b.order)
             .map((task, index, tasks) => (
               <Task
-                key={task.id}
                 title={task.title}
                 content={task.content}
                 id={task.id}

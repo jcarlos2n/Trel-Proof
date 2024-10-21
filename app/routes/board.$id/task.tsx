@@ -24,8 +24,8 @@ interface TaskProps {
     nextOrder,
     previousOrder,
   }: TaskProps) {
-    console.log("TASK")
     let submit = useSubmit();
+  
     let deleteFetcher = useFetcher();
   
     let [acceptDrop, setAcceptDrop] = useState<"none" | "top" | "bottom">("none");
@@ -98,11 +98,10 @@ interface TaskProps {
             );
           }}
         >
-          <h3>{title}</h3>
-          <div className="mt-2">{content || <>&nbsp;</>}</div>
+          <h3 className="text-black">{title}</h3>
           <deleteFetcher.Form method="post">
-            <input type="hidden" name="intent" value="deleteCard" />
-            <input type="hidden" name="itemId" value={id} />
+            <input type="hidden" name="intent" value="deleteTask" />
+            <input type="hidden" name="taskId" value={id} />
             <button
               aria-label="Delete card"
               className="absolute top-4 right-4 hover:text-brand-red"

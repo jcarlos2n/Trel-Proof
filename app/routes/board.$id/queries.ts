@@ -1,6 +1,6 @@
 import { prisma } from "~/db/prisma";
 
-export function deleteCard(id: string, ownerId: string) {
+export function deleteTask(id: string, ownerId: string) {
   return prisma.task.delete({ where: { id, Board: { ownerId } } });
 }
 
@@ -11,8 +11,12 @@ export async function getBoardData(boardId: number, userId: string) {
       ownerId: userId,
     },
     include: {
-      tasks: true,
-      columns: { orderBy: { order: "asc" } },
+      columns: {
+        orderBy: { order: "asc" },
+        include: {
+          tasks: true
+        },
+      },
     },
   });
 }
@@ -40,7 +44,7 @@ export function createOrUpdateTask(
 ) {
   return prisma.task.upsert({
     where: {
-      id: id || undefined,
+      id: id ? id : undefined,
       Board: {
         ownerId,
       },
