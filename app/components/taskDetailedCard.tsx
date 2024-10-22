@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CancelIcon, SaveIcon, TrashIcon } from "./icons";
 
 interface TaskDetailedCardProps {
     task: {
@@ -14,12 +15,17 @@ interface TaskDetailedCardProps {
     };
     onClose: () => void;
 }
+interface SubTask {
+    id: string;
+    title: string;
+    content?: string;
+}
 
 export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
     const [title, setTitle] = useState(task.title);
     const [content, setContent] = useState(task.content);
     const [priority, setPriority] = useState(task.priority);
-    const [subTasks, setSubTasks] = useState(task.subTasks || []);
+    const [subTasks, setSubTasks] = useState<SubTask[]>(task.subTasks || []);
 
     const [isAddingSubTask, setIsAddingSubTask] = useState(false);
     const [newSubTaskTitle, setNewSubTaskTitle] = useState("");
@@ -66,7 +72,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                     <label className="block">Description</label>
                     <textarea
                         className="border rounded w-full p-2"
-                        // value={content}
+                        value={content ?? ""}
                         onChange={(e) => setContent(e.target.value)}
                     />
                 </div>
@@ -88,28 +94,27 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                 type="text"
                                 className="border rounded p-1"
                                 value={subTask.title}
-                            // onChange={(e) =>
-                            //   setSubTasks(
-                            //     subTasks.map((s: any, i: number) =>
-                            //       i === index ? { ...s, title: e.target.value } : s
-                            //     )
-                            //   )
-                            // }
+                                onChange={(e) =>
+                                    setSubTasks(
+                                        subTasks.map((s: any, i: number) =>
+                                            i === index ? { ...s, title: e.target.value } : s
+                                        )
+                                    )
+                                }
                             />
-                            {/* <button onClick={() => setSubTasks(subTasks.filter((_: any, i: number) => i !== index))}>
-                Delete
-              </button> */}
+                            <button onClick={() => setSubTasks(subTasks.filter((_: any, i: number) => i !== index))}>
+                                <TrashIcon />
+                            </button>
                         </div>
                     ))}
                     {!isAddingSubTask ? (
-                        <button 
-                            onClick={() => setIsAddingSubTask(true)} 
+                        <button
+                            onClick={() => setIsAddingSubTask(true)}
                             className="mt-2 text-blue-500"
                         >
-                            Add Subtask
+                            Añadir subtarea
                         </button>
                     ) : (
-                        // Formulario de nueva subtarea
                         <div className="mt-2">
                             <input
                                 type="text"
@@ -124,17 +129,17 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                 value={newSubTaskContent}
                                 onChange={(e) => setNewSubTaskContent(e.target.value)}
                             />
-                            <button 
-                                onClick={handleAddSubTask} 
-                                className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                            <button
+                                onClick={handleAddSubTask}
+                                className="mt-2 px-4 py-2 rounded"
                             >
-                                Save Subtask
+                                <SaveIcon />
                             </button>
-                            <button 
-                                onClick={() => setIsAddingSubTask(false)} 
-                                className="mt-2 text-gray-500"
+                            <button
+                                onClick={() => setIsAddingSubTask(false)}
+                                className="mt-2 px-4 py-2 rounded"
                             >
-                                Cancel
+                                <CancelIcon />
                             </button>
                         </div>
                     )}
