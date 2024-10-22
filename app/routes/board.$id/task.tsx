@@ -1,13 +1,13 @@
 import { useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { useFetcher } from "react-router-dom";
-import { AddIcon, MoreIcon, TrashIcon } from "~/components/icons";
-
-
+import { MoreIcon, TrashIcon } from "~/components/icons";
+import { TaskDetailedCard } from "~/components/taskDetailedCard";
 
 interface TaskProps {
   title: string;
   content: string | null | undefined;
+  priority: number;
   id: string;
   columnId: string;
   order: number;
@@ -23,12 +23,20 @@ export function Task({
   order,
   nextOrder,
   previousOrder,
+  priority
 }: TaskProps) {
   let submit = useSubmit();
-
   let deleteFetcher = useFetcher();
-
   let [acceptDrop, setAcceptDrop] = useState<"none" | "top" | "bottom">("none");
+  let [isCardOpen, setIsCardOpen] = useState(false);
+
+  const handleOpenCard = () => {
+    setIsCardOpen(true);
+  };
+
+  const handleCloseCard = () => {
+    setIsCardOpen(false);
+  };
 
   return deleteFetcher.state !== "idle" ? null : (
     <li
@@ -99,8 +107,8 @@ export function Task({
         }}
       >
         <h3 className="text-black">{title}</h3>
-        <div className="bg-white shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 relative flex items-center justify-end space-x-2">
-          <button>
+        <div className="bg-white shadow shadow-slate-300 border-slate-300 rounded-lg py-1 px-2 relative flex items-center justify-end space-x-2">
+          <button onClick={handleOpenCard}>
             <MoreIcon />
           </button>
           <deleteFetcher.Form method="post">
@@ -119,6 +127,23 @@ export function Task({
           </deleteFetcher.Form>
         </div>
       </div>
+
+      {isCardOpen && (
+        <TaskDetailedCard
+          task={{
+            id,
+            title,
+            content,
+            columnId,
+            priority,
+            order,
+            nextOrder,
+            previousOrder,
+            subTasks: [],
+          }}
+          onClose={handleCloseCard}
+        />
+      )}
     </li>
   );
 }

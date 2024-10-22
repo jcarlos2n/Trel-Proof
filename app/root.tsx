@@ -1,14 +1,22 @@
 import {
+  Link,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 
 import "./tailwind.css";
 import Header from "./components/header";
+import { getAuthCookie } from "./auth/auth";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  let userId = await getAuthCookie(request);
+  return userId;
+}
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -24,6 +32,8 @@ export const links: LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const userId = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
@@ -33,7 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="h-full w-full flex flex-col">
-        <Header/>
+        <Header loggedIn={userId} />
         {children}
         <ScrollRestoration />
         <Scripts />

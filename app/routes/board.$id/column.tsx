@@ -11,7 +11,6 @@ interface Task {
   order: number;
   content?: string;
   priority: number;
-  subTask: []
 }
 
 interface Props {
@@ -64,7 +63,7 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
         if (!transfer.title) {
           throw new Error("Missing transfer.title");
         }
-  
+
         let update = {
           order: 1,
           columnId: columnId,
@@ -151,6 +150,7 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
                 nextOrder={
                   tasks[index + 1] ? tasks[index + 1].order : task.order + 1
                 }
+                priority={task.priority}
               />
             ))
           : null}

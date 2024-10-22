@@ -39,6 +39,12 @@ export async function requireAuthCookie(request: Request) {
   return userId;
 }
 
+export async function getAuthCookie(request: Request) {
+  let userId = await getAuthFromRequest(request);
+
+   return Boolean(userId);;
+}
+
 export async function LoggedInLoader({ request }: DataFunctionArgs) {
   let userId = await getAuthFromRequest(request);
   if (userId) {
