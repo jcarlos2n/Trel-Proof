@@ -11,6 +11,7 @@ interface Task {
   order: number;
   content?: string;
   priority: number;
+  subTasks: []
 }
 
 interface Props {
@@ -151,6 +152,7 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
                   tasks[index + 1] ? tasks[index + 1].order : task.order + 1
                 }
                 priority={task.priority}
+                subTasks={task.subTasks}
               />
             ))
           : null}

@@ -2,7 +2,7 @@ import { useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { useFetcher } from "react-router-dom";
 import { MoreIcon, TrashIcon } from "~/components/icons";
-import { TaskDetailedCard } from "~/components/taskDetailedCard";
+import { TaskDetailedCard } from "./taskDetailedCard";
 
 interface TaskProps {
   title: string;
@@ -13,6 +13,7 @@ interface TaskProps {
   order: number;
   nextOrder: number;
   previousOrder: number;
+  subTasks: []
 }
 
 export function Task({
@@ -23,7 +24,8 @@ export function Task({
   order,
   nextOrder,
   previousOrder,
-  priority
+  priority,
+  subTasks
 }: TaskProps) {
   let submit = useSubmit();
   let deleteFetcher = useFetcher();
@@ -139,7 +141,7 @@ export function Task({
             order,
             nextOrder,
             previousOrder,
-            subTasks: [],
+            subTasks,
           }}
           onClose={handleCloseCard}
         />

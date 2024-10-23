@@ -14,7 +14,11 @@ export async function getBoardData(boardId: number, userId: string) {
       columns: {
         orderBy: { order: "asc" },
         include: {
-          tasks: true
+          tasks: {
+            include: {
+              subTasks: true,
+            },
+          },
         },
       },
     },
@@ -92,6 +96,20 @@ export async function createColumn(
       boardId,
       name,
       order: columnCount + 1,
+    },
+  });
+}
+
+export async function createSubTask(
+  taskId: string,
+  title: string,
+  content: string | null
+) {
+  return await prisma.subTask.create({
+    data: {
+      taskId,
+      title,
+      content,
     },
   });
 }
