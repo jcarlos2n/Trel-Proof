@@ -1,10 +1,16 @@
-import { Link } from "@remix-run/react";
-
+import { Link, useSubmit } from "@remix-run/react";
 
 export default function Header({ loggedIn }: { loggedIn: boolean }) {
+  const submit = useSubmit();
+
+  const handleLogout = () => {
+    const formData = new FormData();
+    formData.set("intent", "logout");
+
+    submit(formData, { method: "post", action: "/logOut" });
+  };
 
   return (
-
     <div className="lg:flex lg:items-center items-center p-5 bg-slate-900">
       <div className="min-w-0 flex-1">
         <Link
@@ -19,9 +25,12 @@ export default function Header({ loggedIn }: { loggedIn: boolean }) {
 
       {loggedIn ? (
         <div className="flex space-x-4">
-          <Link to="/logout" className="text-white font-medium">
+          <button
+            onClick={handleLogout}
+            className="text-white font-medium"
+          >
             Log-Out
-          </Link>
+          </button>
         </div>
       ) : (
         <Link to="/login" className="text-white font-medium">
