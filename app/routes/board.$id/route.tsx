@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { requireAuthCookie } from "~/auth/auth";
 import { badRequest, notFound } from "~/http/bad-request";
-import { createColumn, createOrUpdateTask, createSubTask, deleteTask, getBoardData, updateColumnName } from "./queries";
+import { createColumn, createOrUpdateTask, createSubTask, deleteSubTask, deleteTask, getBoardData, updateColumnName } from "./queries";
 import { useLoaderData } from "@remix-run/react";
 import { NewColumn } from "./newColumn";
 import { useRef } from "react";
@@ -21,7 +21,8 @@ export async function action({ request }: ActionFunctionArgs) {
     let contentTask = String(formData.get("content"));
     let subTaskTitle = String(formData.get("subTaskTitle"));
     let subTaskContent = String(formData.get("subTaskContent"));
-    
+    let subTaskId = String(formData.get("subTaskId"))
+
     switch (intent) {
     
         case "createColumn": {
@@ -52,6 +53,13 @@ export async function action({ request }: ActionFunctionArgs) {
         case "createSubTask": {
             if (!taskId) throw badRequest("Missing taskId");
             await createSubTask(taskId, subTaskTitle, subTaskContent);
+            return { ok: true };
+        }
+
+        case "deleteSubTask": {
+            console.log(subTaskId)
+            if (!subTaskId) throw badRequest("Missing subTaskId");
+            await deleteSubTask(subTaskId);
             return { ok: true };
         }
 

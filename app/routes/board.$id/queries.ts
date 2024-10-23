@@ -113,3 +113,7 @@ export async function createSubTask(
     },
   });
 }
+
+export async function deleteSubTask(id: string) {
+  return await prisma.subTask.delete({ where: { id } });
+}

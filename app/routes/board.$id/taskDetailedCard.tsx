@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { CancelIcon, SaveIcon, TrashIcon } from "../../components/icons";
-import { Form, useSubmit } from "@remix-run/react";
+import { Form, useFetcher, useSubmit } from "@remix-run/react";
 
 interface TaskDetailedCardProps {
     task: {
@@ -23,15 +23,14 @@ interface SubTask {
 }
 
 export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
-    console.log(task)
+
+    let deleteFetcher = useFetcher();
     const [title, setTitle] = useState(task.title);
     const [content, setContent] = useState(task.content);
     const [priority, setPriority] = useState(task.priority);
     const [subTasks, setSubTasks] = useState<SubTask[]>(task.subTasks || []);
 
     const [isAddingSubTask, setIsAddingSubTask] = useState(false);
-    const [newSubTaskTitle, setNewSubTaskTitle] = useState("");
-    const [newSubTaskContent, setNewSubTaskContent] = useState("");
     let listRef = useRef<HTMLUListElement>(null);
     function scrollList() {
         if (listRef.current) {
@@ -94,9 +93,25 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                     )
                                 }
                             />
-                            <button onClick={() => setSubTasks(subTasks.filter((_: any, i: number) => i !== index))}>
-                                <TrashIcon />
-                            </button>
+                            <deleteFetcher.Form method="post">
+                                <input type="hidden" name="intent" value="deleteSubTask" />
+                                <input type="hidden" name="subTaskId" value={subTask.id} />
+                                <button
+                                    aria-label="Delete card"
+                                    className="hover:text-brand-red"
+                                    type="submit"
+                                    onClick={(event) => {
+                                        event.preventDefault(); // Evita el envío automático del formulario
+                                        event.stopPropagation();
+                                  
+                                        setSubTasks(subTasks.filter((_: any, i: number) => i !== index));
+                                  
+                                        deleteFetcher.submit(event.currentTarget.closest("form"));
+                                      }}
+                                >
+                                    <TrashIcon />
+                                </button>
+                            </deleteFetcher.Form>
                         </div>
                     ))}
                     {!isAddingSubTask ? (
@@ -130,11 +145,11 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                 scrollList()
                                 onClose();
                             }}
-                        onBlur={(event) => {
-                            if (!event.currentTarget.contains(event.relatedTarget)) {
-                                onClose();
-                            }
-                        }}
+                            onBlur={(event) => {
+                                if (!event.currentTarget.contains(event.relatedTarget)) {
+                                    onClose();
+                                }
+                            }}
                         >
                             <div className="mt-2">
                                 <input type="hidden" name="intent" value="createSubTask" />
