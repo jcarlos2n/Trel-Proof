@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { CancelIcon, SaveIcon, TrashIcon } from "../../components/icons";
+import { AddIcon, CancelIcon, SaveIcon, TrashIcon } from "../../components/icons";
 import { Form, useFetcher, useSubmit } from "@remix-run/react";
 
 interface TaskDetailedCardProps {
@@ -47,52 +47,63 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
     let submit = useSubmit();
 
     return (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+        <div
+            className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50"
+            onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                    onClose();
+                }
+            }}
+        >
             <div className="bg-white p-4 rounded-lg w-1/2">
-                <h2 className="text-xl font-semibold">Task Details</h2>
+                <input type="hidden" name="intent" value="moveTask" />
+                <input type="hidden" name="taskId" value={task.id} />
+                <input type="hidden" name="columnId" value={task.columnId} />
                 <div className="my-2">
-                    <label className="block">Titulo</label>
+                    <label className="block text-black">Titulo</label>
                     <input
                         type="text"
-                        className="border rounded w-full p-2"
+                        ref={titleRef}
+                        className="border rounded w-full p-2 text-black bg-white"
                         value={title}
+                        name="title"
                         onChange={(e) => setTitle(e.target.value)}
                     />
                 </div>
                 <div className="my-2">
-                    <label className="block">Descripción</label>
-                    <textarea
-                        className="border rounded w-full p-2"
+                    <label className="text-black block">Descripción</label>
+                    <input
+                        ref={contentRef}
+                        name="content"
+                        className="border rounded w-full p-2 text-black bg-white"
                         value={content ?? ""}
                         onChange={(e) => setContent(e.target.value)}
                     />
                 </div>
                 <div className="my-2">
-                    <label className="block">Prioridad</label>
+                    <label className="text-black block">Prioridad</label>
                     <input
                         type="number"
-                        className="border rounded w-full p-2"
+                        ref={priorityRef}
+                        name="priority"
+                        className="border rounded w-full p-2 text-black bg-white"
                         value={priority}
                         onChange={(e) => setPriority(Number(e.target.value))}
                     />
                 </div>
 
                 <div className="my-2">
-                    <h3 className="text-lg">Subtasks</h3>
+                    {subTasks.length > 0 && (
+                        <h3 className="text-black text-lg">Tareas:</h3>
+                    )}
                     {subTasks.map((subTask: any, index: number) => (
                         <div key={subTask.id} className="space-y-2">
                             <div className="flex items-center space-x-2 border">
                                 <input
                                     type="text"
-                                    className="border rounded p-1 w-full"
+                                    className="border rounded p-1 w-full text-black bg-white"
                                     value={subTask.title}
-                                    onChange={(e) =>
-                                        setSubTasks(
-                                            subTasks.map((s: any, i: number) =>
-                                                i === index ? { ...s, title: e.target.value } : s
-                                            )
-                                        )
-                                    }
+                                    readOnly
                                 />
 
                                 <deleteFetcher.Form method="post">
@@ -100,7 +111,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                     <input type="hidden" name="subTaskId" value={subTask.id} />
                                     <button
                                         aria-label="Delete card"
-                                        className="hover:text-brand-red"
+                                        className="px-2 py-2 rounded hover:bg-red-200"
                                         type="submit"
                                         onClick={(event) => {
                                             event.preventDefault();
@@ -115,27 +126,15 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                     </button>
                                 </deleteFetcher.Form>
                             </div>
-                            <textarea
-                                className="border rounded p-1 w-full"
-                                value={subTask.content ?? ""}
-                                onChange={(e) =>
-                                    setSubTasks(
-                                        subTasks.map((s: any, i: number) =>
-                                            i === index ? { ...s, content: e.target.value } : s
-                                        )
-                                    )
-                                }
-                                placeholder="Subtask content"
-                            />
                         </div>
                     ))}
 
                     {!isAddingSubTask ? (
                         <button
                             onClick={() => setIsAddingSubTask(true)}
-                            className="mt-2 text-blue-500"
+                            className="mt-2 hover:bg-green-100 px-4 py-2 rounded"
                         >
-                            Añadir subtarea
+                            <AddIcon />
                         </button>
                     ) : (
                         <Form
@@ -145,7 +144,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                 event.preventDefault();
 
                                 let formData = new FormData(event.currentTarget);
-                                
+
                                 submit(formData, {
                                     method: "post",
                                     navigate: false,
@@ -170,28 +169,19 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                 <input
                                     required
                                     type="text"
-                                    placeholder="Subtask Title"
-                                    className="border rounded w-full p-2"
+                                    placeholder="tarea"
+                                    className="text-black border rounded w-full p-2 bg-white"
                                     name="subTaskTitle"
-                                    ref={titleRef}
-                                />
-                                <input
-                                    required
-                                    placeholder="Subtask Content"
-                                    className="border rounded w-full p-2 mt-2"
-                                    name="subTaskContent"
-                                    ref={contentRef}
                                 />
                                 <button
-                                    ref={buttonRef}
                                     type="submit"
-                                    className="mt-2 px-4 py-2 rounded"
+                                    className="mt-2 px-2 py-2 rounded hover:bg-blue-200"
                                 >
                                     <SaveIcon />
                                 </button>
                                 <button
                                     onClick={() => setIsAddingSubTask(false)}
-                                    className="mt-2 px-4 py-2 rounded"
+                                    className="mt-2 px-2 py-2 rounded hover:bg-blue-200"
                                 >
                                     <CancelIcon />
                                 </button>
@@ -201,11 +191,18 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                     )}
                 </div>
 
-                <div className="flex justify-end space-x-2">
-                    <button onClick={onClose} className="text-gray-500">Cancel</button>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                <div className="flex justify-between space-x-2">
+                    <button
+                        ref={buttonRef}
+                        className="px-4 py-2 rounded hover:bg-blue-200"
+                    >
+                        <SaveIcon />
+                    </button>
+
+                    <button onClick={onClose} className="hover:bg-blue-200 px-4 py-2 rounded"><CancelIcon /></button>
                 </div>
             </div>
         </div>
     );
 }
+

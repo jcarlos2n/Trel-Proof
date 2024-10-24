@@ -62,8 +62,8 @@ export function NewTask({
                 required
                 ref={titleRef}
                 name="title"
-                placeholder="Enter a title for this card"
-                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14"
+                placeholder="Introduce el titulo"
+                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14 text-black bg-white"
             />
 
             <label className="text-black">Descripción</label>
@@ -71,8 +71,8 @@ export function NewTask({
                 required
                 ref={contentRef}
                 name="content"
-                placeholder="Enter a description for this card"
-                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14"
+                placeholder="Introduce la descripcion de la tarea"
+                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14 text-black bg-white"
             />
 
             <label className="text-black">Prioridad</label>
@@ -81,9 +81,8 @@ export function NewTask({
                 required
                 ref={priorityRef}
                 name="priority"
-                placeholder="Enter a priority for this card"
                 defaultValue={0}
-                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 placeholder:text-sm placeholder:text-slate-500"
+                className="outline-none border-slate-300 rounded-lg w-full py-1 px-2 placeholder:text-sm placeholder:text-slate-500 text-black bg-white"
                 step="1"
             />
 

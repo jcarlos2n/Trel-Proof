@@ -48,7 +48,8 @@ export async function action({ request }: ActionFunctionArgs) {
         }
 
         case "moveTask": {
-            if (!columnId) throw badRequest("Missing boardId or columnId");
+            console.log("llego")
+            if (!columnId) throw badRequest("Missing columnId");
             await updateTask( taskId, columnId, orderTask, titleTask, priority, contentTask, userId);
             return { ok: true };
         }
