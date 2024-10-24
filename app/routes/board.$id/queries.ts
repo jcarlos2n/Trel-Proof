@@ -66,7 +66,7 @@ export async function createTask(
   order: number,
   title: string,
   priority: number,
-  content: string | null,
+  content: string,
   ownerId: string,
 ) {
   return await prisma.task.create({
