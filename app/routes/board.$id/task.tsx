@@ -56,7 +56,6 @@ export function Task({
       }}
       onDrop={(event) => {
         event.stopPropagation();
-
         let transfer = JSON.parse(
           event.dataTransfer.getData("application/remix-card"),
         );
@@ -69,16 +68,15 @@ export function Task({
 
         let droppedOrder = acceptDrop === "top" ? previousOrder : nextOrder;
         let moveOrder = (droppedOrder + order) / 2;
-
         let update = {
           order: moveOrder,
           columnId: columnId,
-          id: transfer.id,
-          title: transfer.title,
+          taskId: transfer.id,
+          title: transfer.title
         };
 
         submit(
-          { ...update, intent: "createTask" },
+          { ...update, intent: "moveTask" },
           {
             method: "post",
             navigate: false,

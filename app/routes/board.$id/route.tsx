@@ -1,11 +1,20 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { requireAuthCookie } from "~/auth/auth";
 import { badRequest, notFound } from "~/http/bad-request";
-import { createColumn, createOrUpdateTask, createSubTask, deleteSubTask, deleteTask, getBoardData, updateColumnName } from "./queries";
+import { createColumn, createSubTask, createTask, deleteSubTask, deleteTask, getBoardData, updateColumnName, updateTask } from "./queries";
 import { useLoaderData } from "@remix-run/react";
 import { NewColumn } from "./newColumn";
 import { useRef } from "react";
 import { Column } from "./column";
+
+interface TaskData {
+    id?: string; // id es opcional, ya que podría ser undefined en la creación
+    columnId: string;
+    order: number;
+    title: string;
+    priority: number;
+    content: string;
+}
 
 export async function action({ request }: ActionFunctionArgs) {
     let userId = await requireAuthCookie(request);
@@ -24,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
     let subTaskId = String(formData.get("subTaskId"))
 
     switch (intent) {
-    
+
         case "createColumn": {
             let name = String(formData.get("name") || "");
             if (!name) throw badRequest("Bad request");
@@ -38,9 +47,16 @@ export async function action({ request }: ActionFunctionArgs) {
             return { ok: true };
         }
 
+        case "moveTask": {
+            if (!columnId) throw badRequest("Missing boardId or columnId");
+            await updateTask( taskId, columnId, orderTask, titleTask, priority, contentTask, userId);
+            return { ok: true };
+        }
+
+
         case "createTask": {
             if (!columnId || !boardId) throw badRequest("Missing boardId or columnId");
-            await createOrUpdateTask(taskId,boardId,columnId,orderTask,titleTask,priority,contentTask,userId);
+            await createTask( boardId, columnId, orderTask, titleTask, priority, contentTask, userId);
             return { ok: true };
         }
 
@@ -84,7 +100,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function Board() {
     let { board } = useLoaderData<typeof loader>();
-    // let getTaskById = new Map(board.Task.map(task) => [task.id, task])
 
     let scrollContainerRef = useRef<HTMLDivElement>(null);
     function scrollRight() {
@@ -96,8 +111,8 @@ export default function Board() {
     }
 
     return (
-        <div className="h-full" style={{ backgroundColor: board.color }}>
-            <h1>{board.name}</h1>
+        <div className="min-h-screen" style={{ backgroundColor: board.color }}>
+            <h1 className="text-slate-700 text-4xl underline pl-6 pb-4">{board.name}</h1>
             <div className="flex flex-grow min-h-0 h-full items-start gap-4 px-8 pb-4">
                 {board.columns.map((column: any) => {
                     return (

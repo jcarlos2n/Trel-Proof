@@ -14,18 +14,19 @@ interface Task {
   subTasks: []
 }
 
-interface Props {
+interface ColumnProps {
   boardId: number;
   name: string;
   columnId: string;
   tasks: Task[];
 }
 
-export function Column({ boardId, name, columnId, tasks }: Props) {
+export function Column({ boardId, name, columnId, tasks }: ColumnProps) {
   let submit = useSubmit();
   let [acceptDrop, setAcceptDrop] = useState(false);
   let [columnName, setColumnName] = useState(name);
   let [edit, setEdit] = useState(false);
+  let [newTask, setCreateNewTask] = useState(false);
   let listRef = useRef<HTMLUListElement>(null);
 
   function scrollList() {
@@ -64,17 +65,16 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
         if (!transfer.title) {
           throw new Error("Missing transfer.title");
         }
-
         let update = {
           order: 1,
           columnId: columnId,
           boardId: boardId,
-          id: transfer.id,
+          taskId: transfer.id,
           title: transfer.title,
         };
 
         submit(
-          { ...update, intent: "createTask" },
+          { ...update, intent: "moveTask" },
           {
             method: "post",
             navigate: false,
@@ -97,7 +97,7 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
               name="name"
               value={columnName}
               onChange={(e) => setColumnName(e.target.value)}
-              className="border border-slate-400 w-full rounded-lg py-1 px-2 font-medium text-black"
+              className="border border-slate-400 w-full rounded-lg py-1 px-2 font-medium text-black bg-white"
             />
             <div className="flex flex-row justify-between">
               <button
@@ -108,7 +108,7 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
                     { method: "post", navigate: false }
                   );
                 }}
-                className="block mt-2 bg-blue-500 py-1 px-4 rounded-lg"
+                className="block mt-2 py-1 px-4 rounded-lg"
               >
                 <SaveIcon />
               </button>
@@ -116,7 +116,7 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
                 onClick={() => {
                   setEdit(false);
                 }}
-                className="block mt-2 bg-blue-500 py-1 px-4 rounded-lg"
+                className="block mt-2 py-1 px-4 rounded-lg"
               >
                 <CancelIcon />
               </button>
@@ -157,13 +157,13 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
             ))
           : null}
       </ul>
-      {edit ? (
+      {newTask ? (
         <NewTask
           boardId={boardId}
           columnId={columnId}
           nextOrder={(!tasks || tasks.length === 0) ? 1 : tasks[tasks.length - 1].order + 1}
           onAddCard={() => scrollList()}
-          onComplete={() => setEdit(false)}
+          onComplete={() => setCreateNewTask(false)}
         />
       ) : (
         <div className="p-2 pt-1">
@@ -171,7 +171,7 @@ export function Column({ boardId, name, columnId, tasks }: Props) {
             type="button"
             onClick={() => {
               flushSync(() => {
-                setEdit(true);
+                setCreateNewTask(true);
               });
               scrollList();
             }}

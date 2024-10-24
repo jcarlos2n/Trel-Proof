@@ -1,5 +1,4 @@
 import {
-  Link,
   Links,
   Meta,
   Outlet,
@@ -42,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="h-full w-full flex flex-col">
+      <body className="min-h-screen w-full flex flex-col">
         <Header loggedIn={userId} />
         {children}
         <ScrollRestoration />

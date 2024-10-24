@@ -36,8 +36,31 @@ export async function updateBoardName(
   });
 }
 
-export function createOrUpdateTask(
-  id: string | null,
+export async function updateTask(
+  id: string,
+  columnId: string,
+  order: number,
+  title: string,
+  priority: number,
+  content: string | null,
+  ownerId: string,
+) {
+  return await prisma.task.update({
+    where: {
+      id,
+    },
+    data: {
+      columnId,
+      order,
+      title,
+      priority,
+      content,
+    },
+  });
+
+}
+
+export async function createTask(
   boardId: number,
   columnId: string,
   order: number,
@@ -46,31 +69,19 @@ export function createOrUpdateTask(
   content: string | null,
   ownerId: string,
 ) {
-  return prisma.task.upsert({
-    where: {
-      id: id ? id : undefined,
-      Board: {
-        ownerId,
-      },
-    },
-    create: {
+  return await prisma.task.create({
+    data: {
       boardId,
       columnId,
       order,
       title,
       priority,
-      content
-    },
-    update: {
-      boardId,
-      columnId,
-      order,
-      title,
-      priority,
-      content
+      content,
     },
   });
+
 }
+
 
 export async function updateColumnName(
   id: string,

@@ -51,7 +51,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
             <div className="bg-white p-4 rounded-lg w-1/2">
                 <h2 className="text-xl font-semibold">Task Details</h2>
                 <div className="my-2">
-                    <label className="block">Title</label>
+                    <label className="block">Titulo</label>
                     <input
                         type="text"
                         className="border rounded w-full p-2"
@@ -60,7 +60,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                     />
                 </div>
                 <div className="my-2">
-                    <label className="block">Description</label>
+                    <label className="block">Descripción</label>
                     <textarea
                         className="border rounded w-full p-2"
                         value={content ?? ""}
@@ -68,7 +68,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                     />
                 </div>
                 <div className="my-2">
-                    <label className="block">Priority</label>
+                    <label className="block">Prioridad</label>
                     <input
                         type="number"
                         className="border rounded w-full p-2"
@@ -80,40 +80,56 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                 <div className="my-2">
                     <h3 className="text-lg">Subtasks</h3>
                     {subTasks.map((subTask: any, index: number) => (
-                        <div key={subTask.id} className="flex items-center space-x-2">
-                            <input
-                                type="text"
-                                className="border rounded p-1"
-                                value={subTask.title}
+                        <div key={subTask.id} className="space-y-2">
+                            <div className="flex items-center space-x-2 border">
+                                <input
+                                    type="text"
+                                    className="border rounded p-1 w-full"
+                                    value={subTask.title}
+                                    onChange={(e) =>
+                                        setSubTasks(
+                                            subTasks.map((s: any, i: number) =>
+                                                i === index ? { ...s, title: e.target.value } : s
+                                            )
+                                        )
+                                    }
+                                />
+
+                                <deleteFetcher.Form method="post">
+                                    <input type="hidden" name="intent" value="deleteSubTask" />
+                                    <input type="hidden" name="subTaskId" value={subTask.id} />
+                                    <button
+                                        aria-label="Delete card"
+                                        className="hover:text-brand-red"
+                                        type="submit"
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+
+                                            setSubTasks(subTasks.filter((_: any, i: number) => i !== index));
+
+                                            deleteFetcher.submit(event.currentTarget.closest("form"));
+                                        }}
+                                    >
+                                        <TrashIcon />
+                                    </button>
+                                </deleteFetcher.Form>
+                            </div>
+                            <textarea
+                                className="border rounded p-1 w-full"
+                                value={subTask.content ?? ""}
                                 onChange={(e) =>
                                     setSubTasks(
                                         subTasks.map((s: any, i: number) =>
-                                            i === index ? { ...s, title: e.target.value } : s
+                                            i === index ? { ...s, content: e.target.value } : s
                                         )
                                     )
                                 }
+                                placeholder="Subtask content"
                             />
-                            <deleteFetcher.Form method="post">
-                                <input type="hidden" name="intent" value="deleteSubTask" />
-                                <input type="hidden" name="subTaskId" value={subTask.id} />
-                                <button
-                                    aria-label="Delete card"
-                                    className="hover:text-brand-red"
-                                    type="submit"
-                                    onClick={(event) => {
-                                        event.preventDefault(); // Evita el envío automático del formulario
-                                        event.stopPropagation();
-                                  
-                                        setSubTasks(subTasks.filter((_: any, i: number) => i !== index));
-                                  
-                                        deleteFetcher.submit(event.currentTarget.closest("form"));
-                                      }}
-                                >
-                                    <TrashIcon />
-                                </button>
-                            </deleteFetcher.Form>
                         </div>
                     ))}
+
                     {!isAddingSubTask ? (
                         <button
                             onClick={() => setIsAddingSubTask(true)}
@@ -129,12 +145,9 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                 event.preventDefault();
 
                                 let formData = new FormData(event.currentTarget);
-                                console.log(formData)
-                                // let id = crypto.randomUUID();
-                                // formData.set("id", id);
+                                
                                 submit(formData, {
                                     method: "post",
-                                    // fetcherKey: `card:${id}`,
                                     navigate: false,
                                     unstable_flushSync: true,
                                 });
@@ -172,7 +185,6 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                 <button
                                     ref={buttonRef}
                                     type="submit"
-                                    // onClick={() => setIsAddingSubTask(false)}
                                     className="mt-2 px-4 py-2 rounded"
                                 >
                                     <SaveIcon />

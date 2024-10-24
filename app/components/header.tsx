@@ -11,7 +11,7 @@ export default function Header({ loggedIn }: { loggedIn: boolean }) {
   };
 
   return (
-    <div className="lg:flex lg:items-center items-center p-5 bg-slate-900">
+    <div className="lg:flex lg:items-center items-center p-5 bg-slate-700">
       <div className="min-w-0 flex-1">
         <Link
           to={loggedIn ? "/home" : "/"}
