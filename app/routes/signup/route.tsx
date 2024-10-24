@@ -1,6 +1,7 @@
 import { ActionFunction, json, redirect } from "@remix-run/node";
 import { createUser } from "./queries";
 import { validate } from "./validation";
+import { useActionData } from "@remix-run/react";
 
 export let action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -10,29 +11,31 @@ export let action: ActionFunction = async ({ request }) => {
   try {
     let errors = await validate(String(email), String(password));
     if (errors) {
-      return json({ ok: false, errors }, 400);
+      return json({ ok: false, errors }, { status: 400 });
     }
 
     await createUser(String(email), String(password));
     return redirect("/");
 
   } catch (error) {
-    return { error: "Error al crear el usuario." };
+    return json({ error: "Error al crear el usuario." }, { status: 500 });
   }
 };
 
 export default function signUp() {
+  let actionResult = useActionData<typeof action>();
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-slate-900">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-brand-aqua">
-            Registráte con nostros
+            Registráte con nosotros
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          <form method="POST" className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-brand-aqua">
                 Email
@@ -46,6 +49,9 @@ export default function signUp() {
                   autoComplete="email"
                   className="block w-full rounded-md border-0 py-1.5 text-brand-aqua shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                {actionResult && actionResult.errors?.email && (
+                  <p className="text-red-500">{actionResult.errors.email}</p>
+                )}
               </div>
             </div>
 
@@ -64,6 +70,9 @@ export default function signUp() {
                   autoComplete="current-password"
                   className="block w-full rounded-md border-0 py-1.5 text-brand-aqua shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                {actionResult && actionResult.errors?.password && (
+                  <p className="text-red-500">{actionResult.errors.password}</p>
+                )}
               </div>
             </div>
 
@@ -79,5 +88,5 @@ export default function signUp() {
         </div>
       </div>
     </>
-  )
+  );
 }
