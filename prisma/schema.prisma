@@ -18,7 +18,7 @@ model User {
   email  String  @unique
   boards Board[]
   participant BoardParticipant[]
-
+  taskAssignees TaskAssignee[]
   Password Password?
 }
 
@@ -51,6 +51,15 @@ model BoardParticipant {
   @@id([userId, boardId])
 }
 
+model TaskAssignee {
+  task       Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId     String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+
+  @@id([taskId, userId])
+}
+
 model Column {
   id      String @id @default(uuid())
   name    String
@@ -73,6 +82,8 @@ model Task {
 
   Board   Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId Int
+
+  assignees TaskAssignee[]
 }
 
 model SubTask {

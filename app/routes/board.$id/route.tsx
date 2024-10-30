@@ -8,7 +8,7 @@ import { useRef } from "react";
 import { Column } from "./column";
 
 interface TaskData {
-    id?: string; // id es opcional, ya que podría ser undefined en la creación
+    id?: string;
     columnId: string;
     order: number;
     title: string;
@@ -31,24 +31,25 @@ export async function action({ request }: ActionFunctionArgs) {
     let subTaskTitle = String(formData.get("subTaskTitle"));
     let subTaskContent = String(formData.get("subTaskContent"));
     let subTaskId = String(formData.get("subTaskId"))
-
+    console.log("SWITCH -> ", intent);
     switch (intent) {
 
         case "createColumn": {
-            let name = String(formData.get("name") || "");
-            if (!name) throw badRequest("Bad request");
-            await createColumn(boardId, name, userId);
+            console.log("create COLUMN")
+            if (!columnName) throw badRequest("Bad request");
+            await createColumn(boardId, columnName, userId);
             return { ok: true };
         }
 
         case "updateColumn": {
+            console.log("update column")
             if (!columnId) throw badRequest("Missing boardId");
             await updateColumnName(columnId, columnName, userId);
             return { ok: true };
         }
 
         case "moveTask": {
-            console.log("llego")
+            console.log("UPDATE")
             if (!columnId) throw badRequest("Missing columnId");
             await updateTask( taskId, columnId, orderTask, titleTask, priority, contentTask, userId);
             return { ok: true };
@@ -56,25 +57,28 @@ export async function action({ request }: ActionFunctionArgs) {
 
 
         case "createTask": {
+            console.log("create TASK")
             if (!columnId || !boardId) throw badRequest("Missing boardId or columnId");
             await createTask( boardId, columnId, orderTask, titleTask, priority, contentTask, userId);
             return { ok: true };
         }
 
         case "deleteTask": {
+            console.log("Delete TASK")
             if (!taskId || !userId) throw badRequest("Missing taskId or userId");
             await deleteTask(taskId, userId);
             return { ok: true };
         }
 
         case "createSubTask": {
+            console.log("CREATE")
             if (!taskId) throw badRequest("Missing taskId");
             await createSubTask(taskId, subTaskTitle, subTaskContent);
             return { ok: true };
         }
 
         case "deleteSubTask": {
-            console.log(subTaskId)
+            console.log("Delete")
             if (!subTaskId) throw badRequest("Missing subTaskId");
             await deleteSubTask(subTaskId);
             return { ok: true };

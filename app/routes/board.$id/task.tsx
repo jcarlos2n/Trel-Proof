@@ -1,12 +1,11 @@
-import { useSubmit } from "@remix-run/react";
+import { useFetcher, useSubmit } from "@remix-run/react";
 import { useState } from "react";
-import { useFetcher } from "react-router-dom";
 import { MoreIcon, TrashIcon } from "~/components/icons";
 import { TaskDetailedCard } from "./taskDetailedCard";
 
 interface TaskProps {
   title: string;
-  content: string | null | undefined;
+  content: string;
   priority: number;
   id: string;
   columnId: string;
@@ -131,9 +130,9 @@ export function Task({
       {isCardOpen && (
         <TaskDetailedCard
           task={{
-            id,
             title,
             content,
+            id,
             columnId,
             priority,
             order,
