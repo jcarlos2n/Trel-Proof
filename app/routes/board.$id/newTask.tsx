@@ -81,6 +81,7 @@ export function NewTask({
             <input type="hidden" name="columnId" value={columnId} />
             <input type="hidden" name="boardId" value={boardId} />
             <input type="hidden" name="order" value={nextOrder} />
+            <input type="hidden" ref={contentRef} name="content" value={content} />
 
             <label className="text-black">Titulo</label>
             <input
@@ -93,25 +94,14 @@ export function NewTask({
             />
 
             <label className="text-black">Descripción</label>
-            {/* <input
-                required
-                ref={contentRef}
-                name="content"
-                placeholder="Introduce la descripcion de la tarea"
-                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14 text-black bg-white"
-            /> */}
             <div
                 onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => 
+                    e.stopPropagation()}
                 autoFocus
                 onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}
                 className="text-black">
-                <input
-                    type="hidden"
-                    ref={contentRef}
-                    name="content"
-                    value={content}
-                />
+                
                 <EditorProvider slotBefore={<MenuBar />} extensions={extensions} content={content}></EditorProvider>
             </div>
 

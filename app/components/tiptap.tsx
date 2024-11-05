@@ -1,10 +1,5 @@
-import ListItem from '@tiptap/extension-list-item'
-import './styles.css'
-import { Color } from '@tiptap/extension-color'
-import { EditorProvider, useCurrentEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import React, { useRef } from 'react'
-import TextStyle from '@tiptap/extension-text-style'
+import './styles.scss'
+import { useCurrentEditor } from '@tiptap/react'
 
 export const MenuBar = () => {
   const { editor } = useCurrentEditor()
@@ -14,8 +9,9 @@ export const MenuBar = () => {
   }
 
   return (
-    <div className="button-group flex justify-between">
+    <div className="TiptapEditor button-group flex justify-between">
       <button
+        type="button"
         onMouseDown={() => editor.chain().focus().toggleBold().run()}
         disabled={
           !editor.can()
@@ -29,6 +25,7 @@ export const MenuBar = () => {
         Bold
       </button>
       <button
+        type="button"
         onMouseDown={() => editor.chain().focus().toggleItalic().run()}
         disabled={
           !editor.can()
@@ -42,6 +39,7 @@ export const MenuBar = () => {
         Italic
       </button>
       <button
+        type="button"
         onMouseDown={() => editor.chain().focus().toggleStrike().run()}
         disabled={
           !editor.can()
@@ -55,6 +53,7 @@ export const MenuBar = () => {
         Strike
       </button>
       <button
+        type="button"
         onMouseDown={() => editor.chain().focus().undo().run()}
         disabled={
           !editor.can()
@@ -67,6 +66,7 @@ export const MenuBar = () => {
         Undo
       </button>
       <button
+        type="button"
         onMouseDown={() => editor.chain().focus().redo().run()}
         disabled={
           !editor.can()
@@ -81,33 +81,3 @@ export const MenuBar = () => {
     </div>
   )
 }
-
-// const extensions = [
-//   Color.configure({ types: [TextStyle.name, ListItem.name] }),
-//   TextStyle,
-//   StarterKit.configure({
-//     bulletList: { keepMarks: true, keepAttributes: false },
-//     orderedList: { keepMarks: true, keepAttributes: false },
-//   }),
-// ];
-
-// interface TiptapEditorProps {
-//   content: string
-//   setContent: (content: string) => void
-// }
-
-// const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, setContent }) => {
-//   let contentRef = useRef<HTMLInputElement>(null);
-
-//   return (
-//     <EditorProvider slotBefore={<MenuBar />} extensions={extensions} content={content}>
-//       {/* <div
-//         className="editor-content"
-//         onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}
-//       />
-//       <input ref={contentRef} type="hidden" name="content" value={content}/> */}
-//     </EditorProvider>
-//   )
-// }
-
-// export default TiptapEditor
