@@ -1,6 +1,21 @@
 import { Form, useSubmit } from "@remix-run/react";
-import { useRef } from "react";
+import Color from "@tiptap/extension-color";
+import ListItem from "@tiptap/extension-list-item";
+import TextStyle from "@tiptap/extension-text-style";
+import { EditorProvider } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useRef, useState } from "react";
 import { CancelIcon, SaveIcon } from "~/components/icons";
+import { MenuBar } from "~/components/tiptap";
+
+const extensions = [
+    Color.configure({ types: [TextStyle.name, ListItem.name] }),
+    TextStyle,
+    StarterKit.configure({
+        bulletList: { keepMarks: true, keepAttributes: false },
+        orderedList: { keepMarks: true, keepAttributes: false },
+    }),
+]
 
 export function NewTask({
     boardId,
@@ -20,11 +35,22 @@ export function NewTask({
     let priorityRef = useRef<HTMLInputElement>(null);
     let buttonRef = useRef<HTMLButtonElement>(null);
     let submit = useSubmit();
+    const task = {
+        id: 1,
+        title: 'Simulated Task',
+        content: 'This is a simulated task content.',
+        priority: 'High',
+    };
+
+
+    const [content, setContent] = useState(task.content);
+    console.log("CONTENIDO -> ", content);
 
     return (
         <Form
             method="post"
             className="flex flex-col gap-2.5 p-2 pt-1"
+            onClick={(e) => e.stopPropagation()}
             onSubmit={(event) => {
                 event.preventDefault();
 
@@ -45,11 +71,11 @@ export function NewTask({
                 onAddCard();
                 onComplete();
             }}
-            onBlur={(event) => {
-                if (!event.currentTarget.contains(event.relatedTarget)) {
-                    onComplete();
-                }
-            }}
+        // onBlur={(event) => {
+        //     if (!event.currentTarget.contains(event.relatedTarget)) {
+        //         onComplete();
+        //     }
+        // }}
         >
             <input type="hidden" name="intent" value="createTask" />
             <input type="hidden" name="columnId" value={columnId} />
@@ -67,13 +93,27 @@ export function NewTask({
             />
 
             <label className="text-black">Descripción</label>
-            <input
+            {/* <input
                 required
                 ref={contentRef}
                 name="content"
                 placeholder="Introduce la descripcion de la tarea"
                 className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14 text-black bg-white"
-            />
+            /> */}
+            <div
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+                autoFocus
+                onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}
+                className="text-black">
+                <input
+                    type="hidden"
+                    ref={contentRef}
+                    name="content"
+                    value={content}
+                />
+                <EditorProvider slotBefore={<MenuBar />} extensions={extensions} content={content}></EditorProvider>
+            </div>
 
             <label className="text-black">Prioridad</label>
             <input
@@ -84,6 +124,8 @@ export function NewTask({
                 defaultValue={0}
                 className="outline-none border-slate-300 rounded-lg w-full py-1 px-2 placeholder:text-sm placeholder:text-slate-500 text-black bg-white"
                 step="1"
+                min="0"
+                max="20"
             />
 
             <div className="flex justify-between">

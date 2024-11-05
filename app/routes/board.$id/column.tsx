@@ -169,7 +169,8 @@ export function Column({ boardId, name, columnId, tasks }: ColumnProps) {
         <div className="p-2 pt-1">
           <button
             type="button"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               flushSync(() => {
                 setCreateNewTask(true);
               });

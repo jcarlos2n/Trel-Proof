@@ -5,7 +5,7 @@ import { TaskDetailedCard } from "./taskDetailedCard";
 
 interface TaskProps {
   title: string;
-  content: string;
+  content: string | any;
   priority: number;
   id: string;
   columnId: string;
