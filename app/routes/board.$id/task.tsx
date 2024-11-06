@@ -71,7 +71,9 @@ export function Task({
           order: moveOrder,
           columnId: columnId,
           taskId: transfer.id,
-          title: transfer.title
+          title: transfer.title,
+          content: transfer.content,
+          priority: transfer.priority  
         };
 
         submit(
@@ -101,15 +103,13 @@ export function Task({
           event.dataTransfer.effectAllowed = "move";
           event.dataTransfer.setData(
             "application/remix-card",
-            JSON.stringify({ id, title })
+            JSON.stringify({ id, title, content, priority })
           );
         }}
+        onClick={handleOpenCard}
       >
         <h3 className="text-black">{title}</h3>
         <div className="bg-white shadow shadow-slate-300 border-slate-300 rounded-lg py-1 px-2 relative flex items-center justify-end space-x-2">
-          <button onClick={handleOpenCard}>
-            <MoreIcon />
-          </button>
           <deleteFetcher.Form method="post">
             <input type="hidden" name="intent" value="deleteTask" />
             <input type="hidden" name="taskId" value={id} />

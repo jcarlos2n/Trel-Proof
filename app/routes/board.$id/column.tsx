@@ -71,6 +71,8 @@ export function Column({ boardId, name, columnId, tasks }: ColumnProps) {
           boardId: boardId,
           taskId: transfer.id,
           title: transfer.title,
+          content: transfer.content,
+          priority: transfer.priority
         };
 
         submit(

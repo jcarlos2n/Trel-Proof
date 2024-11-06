@@ -45,7 +45,6 @@ export async function updateTask(
   content: string | null,
   ownerId: string,
 ) {
-  // let content = JSON.stringify(contentToJSON);
 
   return await prisma.task.update({
     where: {
@@ -70,9 +69,7 @@ export async function createTask(
   priority: number,
   content: string,
   ownerId: string,
-) {
-  // let content = JSON.stringify(contentToJSON);
-  
+) {  
   return await prisma.task.create({
     data: {
       boardId,

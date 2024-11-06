@@ -41,10 +41,7 @@ export function NewTask({
         content: 'This is a simulated task content.',
         priority: 'High',
     };
-
-
     const [content, setContent] = useState(task.content);
-    console.log("CONTENIDO -> ", content);
 
     return (
         <Form
@@ -71,17 +68,11 @@ export function NewTask({
                 onAddCard();
                 onComplete();
             }}
-        // onBlur={(event) => {
-        //     if (!event.currentTarget.contains(event.relatedTarget)) {
-        //         onComplete();
-        //     }
-        // }}
         >
             <input type="hidden" name="intent" value="createTask" />
             <input type="hidden" name="columnId" value={columnId} />
             <input type="hidden" name="boardId" value={boardId} />
             <input type="hidden" name="order" value={nextOrder} />
-            <input type="hidden" ref={contentRef} name="content" value={content} />
 
             <label className="text-black">Titulo</label>
             <input
@@ -96,12 +87,12 @@ export function NewTask({
             <label className="text-black">Descripción</label>
             <div
                 onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => 
+                onClick={(e) =>
                     e.stopPropagation()}
                 autoFocus
                 onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}
                 className="text-black">
-                
+                <input type="hidden" ref={contentRef} name="content" value={content} />
                 <EditorProvider slotBefore={<MenuBar />} extensions={extensions} content={content}></EditorProvider>
             </div>
 

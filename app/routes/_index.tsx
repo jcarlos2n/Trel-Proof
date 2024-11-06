@@ -1,5 +1,6 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Link, redirect } from "@remix-run/react";
+import { requireAuthCookie } from "~/auth/auth";
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,6 +8,13 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Trel-Proof!" },
   ];
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  let userId = await requireAuthCookie(request);
+  if (userId) {
+    return redirect("/home")
+  }
+}
 
 export default function Index() {
   return (

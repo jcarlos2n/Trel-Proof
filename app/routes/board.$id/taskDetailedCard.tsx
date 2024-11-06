@@ -45,7 +45,6 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
     const [content, setContent] = useState(task.content);
     const [priority, setPriority] = useState(task.priority);
     const [subTasks, setSubTasks] = useState<SubTask[]>(task.subTasks || []);
-    console.log("content -> ", content)
     const [isAddingSubTask, setIsAddingSubTask] = useState(false);
     let listRef = useRef<HTMLUListElement>(null);
 
@@ -103,6 +102,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                         <input
                             type="text"
                             className="border rounded w-full p-2 text-black bg-white"
+                            ref={titleRef}
                             value={title}
                             name="title"
                             onChange={(e) => setTitle(e.target.value)}
@@ -111,12 +111,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                     <div className="my-2 text-black">
                         <label className="block">Descripción</label>
                         <div onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}>
-                            <input
-                                type="hidden"
-                                ref={contentRef}
-                                name="content"
-                                value={content}
-                            />
+                            <input type="hidden" ref={contentRef} name="content" value={content} />
                             <EditorProvider slotBefore={<MenuBar />} extensions={extensions} content={content}></EditorProvider>
                         </div>
                     </div>
@@ -125,6 +120,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                         <input
                             type="number"
                             name="priority"
+                            ref={priorityRef}
                             className="border rounded w-full p-2 text-black bg-white"
                             value={priority}
                             onChange={(e) => setPriority(Number(e.target.value))}

@@ -7,15 +7,6 @@ import { NewColumn } from "./newColumn";
 import { useRef } from "react";
 import { Column } from "./column";
 
-interface TaskData {
-    id?: string;
-    columnId: string;
-    order: number;
-    title: string;
-    priority: number;
-    content: string;
-}
-
 export async function action({ request }: ActionFunctionArgs) {
     let userId = await requireAuthCookie(request);
     let formData = await request.formData();
@@ -31,25 +22,22 @@ export async function action({ request }: ActionFunctionArgs) {
     let subTaskTitle = String(formData.get("subTaskTitle"));
     let subTaskContent = String(formData.get("subTaskContent"));
     let subTaskId = String(formData.get("subTaskId"))
-    console.log("SWITCH -> ", intent);
+
     switch (intent) {
 
         case "createColumn": {
-            console.log("create COLUMN")
             if (!columnName) throw badRequest("Bad request");
             await createColumn(boardId, columnName, userId);
             return { ok: true };
         }
 
         case "updateColumn": {
-            console.log("update column")
             if (!columnId) throw badRequest("Missing boardId");
             await updateColumnName(columnId, columnName, userId);
             return { ok: true };
         }
 
         case "moveTask": {
-            console.log("UPDATE")
             if (!columnId) throw badRequest("Missing columnId");
             await updateTask( taskId, columnId, orderTask, titleTask, priority, contentTask, userId);
             return { ok: true };
@@ -57,28 +45,24 @@ export async function action({ request }: ActionFunctionArgs) {
 
 
         case "createTask": {
-            console.log("create TASK")
             if (!columnId || !boardId) throw badRequest("Missing boardId or columnId");
             await createTask( boardId, columnId, orderTask, titleTask, priority, contentTask, userId);
             return { ok: true };
         }
 
         case "deleteTask": {
-            console.log("Delete TASK")
             if (!taskId || !userId) throw badRequest("Missing taskId or userId");
             await deleteTask(taskId, userId);
             return { ok: true };
         }
 
         case "createSubTask": {
-            console.log("CREATE")
             if (!taskId) throw badRequest("Missing taskId");
             await createSubTask(taskId, subTaskTitle, subTaskContent);
             return { ok: true };
         }
 
         case "deleteSubTask": {
-            console.log("Delete")
             if (!subTaskId) throw badRequest("Missing subTaskId");
             await deleteSubTask(subTaskId);
             return { ok: true };
@@ -116,9 +100,9 @@ export default function Board() {
     }
 
     return (
-        <div className="min-h-screen" style={{ backgroundColor: board.color }}>
+        <div className="h-screen overflow-x-auto overflow-y-hidden flex flex-col" style={{ backgroundColor: board.color }}>
             <h1 className="text-slate-700 text-4xl underline pl-6 pb-4">{board.name}</h1>
-            <div className="flex flex-grow min-h-0 h-full items-start gap-4 px-8 pb-4">
+            <div ref={scrollContainerRef} className="flex items-start gap-4 px-8 pb-4 h-full overflow-x-auto scroll-snap-x scroll-snap-align">
                 {board.columns.map((column: any) => {
                     return (
                         <Column
