@@ -90,16 +90,13 @@ export function Column({ boardId, name, columnId, tasks }: ColumnProps) {
       <div className="p-2">
         {edit ? (
           <div>
-            <label htmlFor="updateColumnName" className="sr-only">
-              Edit column name
-            </label>
             <input
               type="text"
               id="updateColumnName"
               name="name"
               value={columnName}
               onChange={(e) => setColumnName(e.target.value)}
-              className="border border-slate-400 w-full rounded-lg py-1 px-2 font-medium text-black bg-white"
+              className="border border-slate-400 w-full rounded-lg py-1 px-2 font-medium text-slate-600 bg-white"
             />
             <div className="flex flex-row justify-between">
               <button
@@ -128,7 +125,7 @@ export function Column({ boardId, name, columnId, tasks }: ColumnProps) {
         ) : (
           <button
             onClick={() => setEdit(true)}
-            className="block rounded-lg text-left w-full border border-transparent py-1 px-2 font-medium text-slate-600"
+            className="block rounded-lg text-left w-full border border-transparent py-1 px-2 font-medium text-slate-600 text-xl"
             aria-label={`Edit column "${name}" name`}
           >
             {name}

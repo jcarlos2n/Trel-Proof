@@ -44,7 +44,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function home() {
   return (
-    <div className="h-full bg-slate-900">
+    <div className="h-full bg-indigo-900">
       <CreateBoard />
       <Boards />
     </div>
@@ -58,7 +58,7 @@ function Boards() {
 
   return (
     <div className="p-8">
-      <h2 className="font-bold mb-2 text-xl">Boards</h2>
+      <h2 className="font-bold mb-2 text-xl">Tableros</h2>
       <nav className="flex flex-wrap gap-8">
         {boards.map((board) => (
           <Board
@@ -80,10 +80,10 @@ function CreateBoard() {
 
   return (
     <Form method="post" className="p-8 max-w-md">
-      <input type="hidden" name="intent" value="createBoard" />
+      <input type="hidden" name="intent" value="createBoard" className="text-white" />
       <div>
         <h2 className="font-bold mb-2 text-xl">Crear nuevo tablero</h2>
-        <LabeledInput label="Name" name="name" type="text" required />
+        <LabeledInput label="Titulo" name="name" type="text" required />
       </div>
 
       <div className="mt-4 flex items-center gap-4">

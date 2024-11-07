@@ -14,27 +14,28 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (userId) {
     return redirect("/home")
   }
+  return null
 }
 
 export default function Index() {
   return (
-    <div className="h-full flex flex-col items-center m-5 pt-30 bg-slate-900">
+    <div className="h-full flex flex-col justify-center items-center m-5 bg-indigo-900">
       <div className="space-y-4 max-w-md text-lg text-slate-300">
         <p>
           Esto es una versión de prueba de Trel-Proof! Inspirada en Trello.
         </p>
       </div>
-      <div className="flex w-full justify-evenly max-w-md mt-8 rounded-3xl p-10 bg-slate-800">
+      <div className="flex w-full justify-evenly max-w-md mt-8 rounded-3xl p-10 bg-slate-700">
         <Link
           to="/signup"
-          className="text-xl font-medium text-brand-aqua underline"
+          className="text-xl font-medium text-brand-aqua"
         >
           Sign up
         </Link>
         <div className="h-full border-r border-slate-500" />
         <Link
           to="/login"
-          className="text-xl font-medium text-brand-aqua underline"
+          className="text-xl font-medium text-brand-aqua"
         >
           Login
         </Link>

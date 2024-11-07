@@ -20,7 +20,9 @@ export const MenuBar = () => {
             .toggleBold()
             .run()
         }
-        className={editor.isActive('bold') ? 'is-active' : ''}
+        className={`${editor.isActive('bold') ? 'bg-gray-500 text-white' : 'bg-gray-200 text-slate-600'
+          } p-1 rounded-md transition duration-200 disabled:bg-gray-100`}
+
       >
         Bold
       </button>
@@ -34,7 +36,8 @@ export const MenuBar = () => {
             .toggleItalic()
             .run()
         }
-        className={editor.isActive('italic') ? 'is-active' : ''}
+        className={`${editor.isActive('italic') ? 'bg-gray-500 text-white' : 'bg-gray-200 text-slate-600'
+          } p-1 rounded-md transition duration-200 disabled:bg-gray-100`}
       >
         Italic
       </button>
@@ -48,7 +51,8 @@ export const MenuBar = () => {
             .toggleStrike()
             .run()
         }
-        className={editor.isActive('strike') ? 'is-active' : ''}
+        className={`${editor.isActive('strike') ? 'bg-gray-500 text-white' : 'bg-gray-200 text-slate-600'
+          } p-1 rounded-md transition duration-200 disabled:bg-gray-100`}
       >
         Strike
       </button>
@@ -62,6 +66,7 @@ export const MenuBar = () => {
             .undo()
             .run()
         }
+        className={`p-1 rounded-md transition duration-200 ${editor.can().chain().focus().undo().run() ? 'bg-gray-200' : 'bg-gray-200 text-slate-600'} disabled:bg-gray-100`}
       >
         Undo
       </button>
@@ -75,6 +80,7 @@ export const MenuBar = () => {
             .redo()
             .run()
         }
+        className={`p-1 rounded-md transition duration-200 ${editor.can().chain().focus().redo().run() ? 'bg-gray-200' : 'bg-gray-200 text-slate-600'} disabled:bg-gray-100`}
       >
         Redo
       </button>

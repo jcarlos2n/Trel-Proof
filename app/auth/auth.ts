@@ -27,7 +27,9 @@ export async function setAuthFromLogin(
 
 export async function requireAuthCookie(request: Request) {
   let userId = await getAuthFromRequest(request);
-  if (!userId) {
+  let url = new URL(request.url);
+
+  if (!userId && url.pathname !== "/") {
     throw redirect("/login", {
       headers: {
         "Set-Cookie": await cookie.serialize("", {
@@ -36,7 +38,8 @@ export async function requireAuthCookie(request: Request) {
       },
     });
   }
-  return userId;
+
+  return userId || "";
 }
 
 export async function getAuthCookie(request: Request) {

@@ -98,17 +98,17 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                         <button onClick={onClose} className="hover:bg-red-200 px-4 py-2 rounded"><CancelIcon /></button>
                     </div>
                     <div className="my-2">
-                        <label className="block text-black">Titulo</label>
+                        <label className="block text-slate-600">Titulo</label>
                         <input
                             type="text"
-                            className="border rounded w-full p-2 text-black bg-white"
+                            className="border rounded w-full p-2 text-slate-600 bg-white"
                             ref={titleRef}
                             value={title}
                             name="title"
                             onChange={(e) => setTitle(e.target.value)}
                         />
                     </div>
-                    <div className="my-2 text-black">
+                    <div className="my-2 text-slate-600">
                         <label className="block">Descripción</label>
                         <div onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}>
                             <input type="hidden" ref={contentRef} name="content" value={content} />
@@ -116,12 +116,12 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                         </div>
                     </div>
                     <div className="my-2">
-                        <label className="text-black block">Prioridad</label>
+                        <label className="text-slate-600 block">Prioridad</label>
                         <input
                             type="number"
                             name="priority"
                             ref={priorityRef}
-                            className="border rounded w-full p-2 text-black bg-white"
+                            className="border rounded w-full p-2 text-slate-600 bg-white"
                             value={priority}
                             onChange={(e) => setPriority(Number(e.target.value))}
                         />
@@ -130,14 +130,14 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
 
                 <div className="my-2">
                     {subTasks.length > 0 && (
-                        <h3 className="text-black text-lg">Tareas:</h3>
+                        <h3 className="text-slate-600 text-lg">Tareas:</h3>
                     )}
                     {subTasks.map((subTask: any, index: number) => (
                         <div key={subTask.id} className="space-y-2">
                             <div className="flex items-center space-x-2 border">
                                 <input
                                     type="text"
-                                    className="border rounded p-1 w-full text-black bg-white"
+                                    className="border rounded p-1 w-full text-slate-600 bg-white"
                                     value={subTask.title}
                                     readOnly
                                 />
@@ -190,7 +190,7 @@ export function TaskDetailedCard({ task, onClose }: TaskDetailedCardProps) {
                                 required
                                 type="text"
                                 placeholder="tarea"
-                                className="text-black border rounded w-full p-2 bg-white"
+                                className="text-slate-600 border rounded w-full p-2 bg-white"
                                 name="subTaskTitle"
                             />
                             <div className="flex space-x-2">

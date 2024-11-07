@@ -39,14 +39,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
         case "moveTask": {
             if (!columnId) throw badRequest("Missing columnId");
-            await updateTask( taskId, columnId, orderTask, titleTask, priority, contentTask, userId);
+            await updateTask(taskId, columnId, orderTask, titleTask, priority, contentTask, userId);
             return { ok: true };
         }
 
 
         case "createTask": {
             if (!columnId || !boardId) throw badRequest("Missing boardId or columnId");
-            await createTask( boardId, columnId, orderTask, titleTask, priority, contentTask, userId);
+            await createTask(boardId, columnId, orderTask, titleTask, priority, contentTask, userId);
             return { ok: true };
         }
 
@@ -101,7 +101,9 @@ export default function Board() {
 
     return (
         <div className="h-screen overflow-x-auto overflow-y-hidden flex flex-col" style={{ backgroundColor: board.color }}>
-            <h1 className="text-slate-700 text-4xl underline pl-6 pb-4">{board.name}</h1>
+            <div className="flex justify-center align-center">            
+                <h1 className="text-4xl mt-2 p-3 rounded-xl bg-indigo-900 mb-3 bg-opacity-30">{board.name}</h1>
+            </div>
             <div ref={scrollContainerRef} className="flex items-start gap-4 px-8 pb-4 h-full overflow-x-auto scroll-snap-x scroll-snap-align">
                 {board.columns.map((column: any) => {
                     return (

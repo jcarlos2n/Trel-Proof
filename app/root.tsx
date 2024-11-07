@@ -38,10 +38,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
         <Meta />
         <Links />
       </head>
-      <body className="h-screen w-full flex flex-col">
+      <body className="h-screen w-full flex flex-col bg-indigo-900">
         <Header loggedIn={userId} />
         {children}
         <ScrollRestoration />

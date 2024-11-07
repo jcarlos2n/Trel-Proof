@@ -6,6 +6,7 @@ export default {
     extend: {
       fontFamily: {
         sans: [
+          '"Poppins"',
           '"Inter"',
           "ui-sans-serif",
           "system-ui",

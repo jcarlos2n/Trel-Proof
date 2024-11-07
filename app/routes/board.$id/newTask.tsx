@@ -38,7 +38,7 @@ export function NewTask({
     const task = {
         id: 1,
         title: 'Simulated Task',
-        content: 'This is a simulated task content.',
+        content: 'Inserta la descripción aqui.',
         priority: 'High',
     };
     const [content, setContent] = useState(task.content);
@@ -74,36 +74,37 @@ export function NewTask({
             <input type="hidden" name="boardId" value={boardId} />
             <input type="hidden" name="order" value={nextOrder} />
 
-            <label className="text-black">Titulo</label>
+            <label className="text-slate-600 text-sm">Titulo</label>
             <input
                 autoFocus
                 required
                 ref={titleRef}
                 name="title"
                 placeholder="Introduce el titulo"
-                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 h-14 text-black bg-white"
+                className="outline-none shadow shadow-slate-300 border-slate-300 text-sm rounded-lg w-full py-1 px-2 resize-none placeholder:text-sm placeholder:text-slate-500 text-slate-600 bg-white"
             />
 
-            <label className="text-black">Descripción</label>
+            <label className="text-slate-600 text-sm">Descripción</label>
             <div
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={(e) =>
                     e.stopPropagation()}
                 autoFocus
                 onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}
-                className="text-black">
+                className="text-slate-600 border p-2 rounded-md shadow-sm bg-white relative"                >
                 <input type="hidden" ref={contentRef} name="content" value={content} />
-                <EditorProvider slotBefore={<MenuBar />} extensions={extensions} content={content}></EditorProvider>
+                <EditorProvider 
+                slotBefore={<MenuBar />} extensions={extensions} content={content}></EditorProvider>
             </div>
 
-            <label className="text-black">Prioridad</label>
+            <label className="text-slate-600 text-sm">Prioridad</label>
             <input
                 type="number"
                 required
                 ref={priorityRef}
                 name="priority"
                 defaultValue={0}
-                className="outline-none border-slate-300 rounded-lg w-full py-1 px-2 placeholder:text-sm placeholder:text-slate-500 text-black bg-white"
+                className="outline-none border-slate-300 rounded-lg w-full py-1 px-2 placeholder:text-sm placeholder:text-slate-500 text-slate-600 bg-white"
                 step="1"
                 min="0"
                 max="20"

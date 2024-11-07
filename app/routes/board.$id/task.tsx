@@ -108,7 +108,7 @@ export function Task({
         }}
         onClick={handleOpenCard}
       >
-        <h3 className="text-black">{title}</h3>
+        <h3 className="text-slate-600">{title}</h3>
         <div className="bg-white shadow shadow-slate-300 border-slate-300 rounded-lg py-1 px-2 relative flex items-center justify-end space-x-2">
           <deleteFetcher.Form method="post">
             <input type="hidden" name="intent" value="deleteTask" />
