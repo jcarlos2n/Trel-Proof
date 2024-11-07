@@ -1,40 +1,40 @@
-# Welcome to Remix!
+# TREL-PROOF
 
-- 📖 [Remix docs](https://remix.run/docs)
+**TREL-PROOF** is a task management application inspired by Trello, developed as part of a technical test. This app allows you to manage boards, tasks, and subtasks with drag-and-drop functionality, as well as support for rich text in tasks.
 
-## Development
+## Requirements
 
-Run the dev server:
+Before running the project, make sure you have the following installed:
 
-```shellscript
-npm run dev
-```
+- **Node.js** (recommended version 16.x or higher)
+- **Prisma** (for the database)
+- **Configured database** (e.g., PostgreSQL or SQLite)
 
-## Deployment
+## Installation and Setup
 
-First, build your app for production:
+Follow these steps to run the application locally:
 
-```sh
-npm run build
-```
+1. **Install dependencies:**
 
-Then run the app in production mode:
+   Run the following command to install all the project dependencies:
 
-```sh
-npm start
-```
+   ```sh
+   npm i
+   ```
 
-Now you'll need to pick a host to deploy it to.
+2. **Migrate the database:**
 
-### DIY
+   Ensure your database is properly configured and migrate the necessary tables for the project:
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+   ```sh
+   npx prisma migrate dev
+   ```
 
-Make sure to deploy the output of `npm run build`
+3. **Start the development server:**
 
-- `build/server`
-- `build/client`
+   Run the following command to start the development server and launch the application:
 
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+   ```sh
+   npm run dev
+   ```
+    
